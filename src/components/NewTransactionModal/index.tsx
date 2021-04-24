@@ -17,8 +17,9 @@ export function NewTransactionModal({
   isOpen,
   onRequestClose,
 }: NewTransactionModalProps) {
-
-  const { createTransaction } = useTransactions();
+  const {
+    /* createTransaction */ createTransactionMutation,
+  } = useTransactions();
 
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState(0);
@@ -28,7 +29,7 @@ export function NewTransactionModal({
   async function handleCreateNewTransaction(event: FormEvent) {
     event.preventDefault();
 
-    await createTransaction({
+    await createTransactionMutation({
       title,
       amount,
       category,

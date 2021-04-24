@@ -1,17 +1,22 @@
 import { useState } from "react";
 import Modal from "react-modal";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClientProvider } from "react-query";
 import { Dashboard } from "./components/Dashboard";
 import { Header } from "./components/Header";
 import { NewTransactionModal } from "./components/NewTransactionModal";
 
 import { GlobalStyle } from "./styles/global";
-import { TransactionsProvider } from './hooks/useTransactions';
+import { TransactionsProvider } from "./hooks/useTransactions";
+import { queryClient } from "./services/queryClient";
 
 //Questões de acessibilidade
 Modal.setAppElement("#root");
 
 export function App() {
-  const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false);
+  const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(
+    false
+  );
 
   function handleOpenNewTransactionModal() {
     setIsNewTransactionModalOpen(true);
@@ -22,17 +27,21 @@ export function App() {
   }
 
   return (
-    <TransactionsProvider>
-      <Header onOpenNewTransactionModal={handleOpenNewTransactionModal} />
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
 
-      <Dashboard />
+      <TransactionsProvider>
+        <Header onOpenNewTransactionModal={handleOpenNewTransactionModal} />
 
-      <NewTransactionModal
-        isOpen={isNewTransactionModalOpen}
-        onRequestClose={handleCloseNewTransactionModal}
-      />
+        <Dashboard />
 
-      <GlobalStyle />
-    </TransactionsProvider>
+        <NewTransactionModal
+          isOpen={isNewTransactionModalOpen}
+          onRequestClose={handleCloseNewTransactionModal}
+        />
+
+        <GlobalStyle />
+      </TransactionsProvider>
+    </QueryClientProvider>
   );
 }
